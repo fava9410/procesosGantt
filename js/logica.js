@@ -1,8 +1,7 @@
 $(document).ready(function(){
   $("#inicio").click(function(){
 
-    var tiemposRafaga = ["Tiempo Rafaga",1,2,3,5,6,7,9];
-    //var tiemposRafaga = ["Tiempo Rafaga",5,5,5,5,5,5,5];
+    var tiemposRafaga = ["Tiempo Rafaga"];
     var procesos = ["Proceso","A","B","C","D","E","F","G"];
     var llegada = ["Tiempo de llegada"];
     var tiempoFinalizacion = ["Tiempo de Finalizacion"];
@@ -14,6 +13,11 @@ $(document).ready(function(){
     var matriz = [procesos,llegada,tiemposRafaga,tiempoComienzo,tiempoFinalizacion,tiempoRetorno,tiempoEspera];
     var intervalo = 10, tamaño = 20, contador = 1;
 
+    //RAFAGA
+    for(var i=0; i<procesos.length-1; i++){
+      alea = Math.round(Math.random()*6+1);
+      tiemposRafaga.push(alea);
+    }
     //LLEGADA
     for(var i=0; i< (procesos.length-1)*4; i+=4){
       alea = i+Math.round(Math.random()*3);
