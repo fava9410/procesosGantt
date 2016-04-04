@@ -4,7 +4,7 @@ $(document).ready(function(){
     var tiemposRafaga = ["Tiempo Rafaga",1,2,3,5,6,7,9];
     //var tiemposRafaga = ["Tiempo Rafaga",5,5,5,5,5,5,5];
     var procesos = ["Proceso","A","B","C","D","E","F","G"];
-    var llegada = ["Tiempo de llegada",0,1,2,3,4,5,6];
+    var llegada = ["Tiempo de llegada"];
     var tiempoFinalizacion = ["Tiempo de Finalizacion"];
     var tiempoRetorno = ["Tiempo de Retorno"];
     var tiempoEspera = ["Tiempo de Espera"];
@@ -15,10 +15,10 @@ $(document).ready(function(){
     var intervalo = 10, tamaño = 20, contador = 1;
 
     //LLEGADA
-    /*for(var i=0; i< (procesos.length-1)*4; i+=4){
+    for(var i=0; i< (procesos.length-1)*4; i+=4){
       alea = i+Math.round(Math.random()*3);
       llegada.push(alea);
-    }*/
+    }
     //FINALIZACION
     for(var i=1; i<procesos.length; i++){
       if(llegada[i]>=tiempoFinalizacion[i-1] || i==1){
@@ -81,15 +81,17 @@ $(document).ready(function(){
         lienzo.fillStyle=colores[i];
         lienzo.fillRect(10,i*(tamaño+intervalo),tamaño,tamaño);
       }
+      //DIBUJAR NUMEROS
+      for(var i=0; i<=tiempoFinalizacion[tiempoFinalizacion.length-1]; i++){
+        lienzo.fillStyle = "black";
+        lienzo.font = "20px Arial";
+        lienzo.fillText(i, (i+1)*(tamaño+intervalo)+10, 290);
+      }
     }
     function pintar_procesos(){
       var elemento = document.getElementById("lienzo");
       var lienzo = elemento.getContext('2d');      
-      //for(var i=1; i<tiempoFinalizacion[tiempoFinalizacion.length-1]; i++){
       for(var i=1; i<procesos.length; i++){ 
-        /*for(var j=1; j<procesos.length; j++){
-          lienzo.fillRect(i*(tamaño+intervalo)+10,j*(tamaño+intervalo),tamaño,tamaño);  
-        } */
         if(contador-1 >= tiempoComienzo[i] && contador-1<tiempoFinalizacion[i]){
           lienzo.fillStyle = colores[i];      
         }
@@ -110,6 +112,5 @@ $(document).ready(function(){
 
     setInterval(pintar_procesos,1000);            
   });  
-  //$("#tabla").css({"float":"top","background-color":"yellow"});
-  $("#lienzo").css({"background-color":"black"});
+  //$("#lienzo").css({"background-color":"black"});
 });
