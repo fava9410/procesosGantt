@@ -84,6 +84,9 @@ $(document).ready(function(){
       for(var i=1; i<procesos.length; i++){
         lienzo.fillStyle=colores[i];
         lienzo.fillRect(10,i*(tamaño+intervalo),tamaño,tamaño);
+        lienzo.fillStyle = "white";
+        lienzo.font = "20px Arial";
+        lienzo.fillText(procesos[i],13,i*(tamaño+intervalo)+17);
       }
       //DIBUJAR NUMEROS
       for(var i=0; i<=tiempoFinalizacion[tiempoFinalizacion.length-1]; i++){
@@ -110,11 +113,14 @@ $(document).ready(function(){
         lienzo.fillRect(contador*(tamaño+intervalo)+10, i*(tamaño+intervalo),tamaño,tamaño);       
       }
       contador++;
+      /*if(contador>tiempoFinalizacion[tiempoFinalizacion.length-1]){
+        clearInterval(intervalo);
+      }*/
     }
     $("#inicio").hide();
     pintar();
-
     setInterval(pintar_procesos,1000);            
+    //var intervalo = setInterval(pintar_procesos,1000);            
   });  
   //$("#lienzo").css({"background-color":"black"});
 });
