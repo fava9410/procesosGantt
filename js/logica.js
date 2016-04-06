@@ -1,18 +1,33 @@
 $(document).ready(function(){
+  var tiemposRafaga = ["Tiempo Rafaga"];
+  var procesos = ["Proceso","A","B","C","D","E","F","G"];
+  var llegada = ["Tiempo de llegada"];
+  var tiempoFinalizacion = ["Tiempo de Finalizacion"];
+  var tiempoRetorno = ["Tiempo de Retorno"];
+  var tiempoEspera = ["Tiempo de Espera"];
+  var tiempoComienzo = ["Tiempo de Comienzo"];
+  var colores = ["red","blue","green","brown","yellow","purple","magenta","gray","white"]
+  var alea = 0;
+  var matriz = [procesos,llegada,tiemposRafaga,tiempoComienzo,tiempoFinalizacion,tiempoRetorno,tiempoEspera];
+  var intervalo = 10, tamaño = 20, contador = 1;
   $("#inicio").click(function(){
 
-    var tiemposRafaga = ["Tiempo Rafaga"];
-    var procesos = ["Proceso","A","B","C","D","E","F","G"];
-    var llegada = ["Tiempo de llegada"];
-    var tiempoFinalizacion = ["Tiempo de Finalizacion"];
-    var tiempoRetorno = ["Tiempo de Retorno"];
-    var tiempoEspera = ["Tiempo de Espera"];
-    var tiempoComienzo = ["Tiempo de Comienzo"];
-    var colores = ["red","blue","green","brown","yellow","purple","magenta","gray","white"]
-    var alea = 0;
-    var matriz = [procesos,llegada,tiemposRafaga,tiempoComienzo,tiempoFinalizacion,tiempoRetorno,tiempoEspera];
-    var intervalo = 10, tamaño = 20, contador = 1;
+    
 
+    rellenarTabla();
+    dibujarTabla();
+    //contador++;
+      /*if(contador>tiempoFinalizacion[tiempoFinalizacion.length-1]){
+        clearInterval(intervalo);
+      }*/
+    
+    $("#inicio").hide();
+    pintar();
+    setInterval(pintar_procesos,1000);                
+  });  
+  //$("#lienzo").css({"background-color":"black"});
+
+  function rellenarTabla(){
     //RAFAGA
     for(var i=0; i<procesos.length-1; i++){
       alea = Math.round(Math.random()*6+1);
@@ -43,7 +58,9 @@ $(document).ready(function(){
     for(var i=1; i<procesos.length; i++){
       tiempoComienzo.push(llegada[i]+tiempoEspera[i]);
     }
+  }
 
+  function dibujarTabla(){
     // Obtener la referencia del elemento body
     var body = document.getElementById("tabla");
 
@@ -76,51 +93,43 @@ $(document).ready(function(){
     body.appendChild(tabla);
     // modifica el atributo "border" de la tabla y lo fija a "2";
     tabla.setAttribute("border", "2");
+  }
 
-    function pintar(){
-      var elemento = document.getElementById("lienzo");
-      var lienzo = elemento.getContext('2d');          
-      // DIBUJAR PROCESOS
-      for(var i=1; i<procesos.length; i++){
-        lienzo.fillStyle=colores[i];
-        lienzo.fillRect(10,i*(tamaño+intervalo),tamaño,tamaño);
-        lienzo.fillStyle = "white";
-        lienzo.font = "20px Arial";
-        lienzo.fillText(procesos[i],13,i*(tamaño+intervalo)+17);
-      }
-      //DIBUJAR NUMEROS
-      for(var i=0; i<=tiempoFinalizacion[tiempoFinalizacion.length-1]; i++){
-        lienzo.fillStyle = "black";
-        lienzo.font = "20px Arial";
-        lienzo.fillText(i, (i+1)*(tamaño+intervalo)+10, 290);
-      }
+  function pintar(){
+    var elemento = document.getElementById("lienzo");
+    var lienzo = elemento.getContext('2d');          
+    // DIBUJAR PROCESOS
+    for(var i=1; i<procesos.length; i++){
+      lienzo.fillStyle=colores[i];
+      lienzo.fillRect(10,i*(tamaño+intervalo),tamaño,tamaño);
+      lienzo.fillStyle = "white";
+      lienzo.font = "20px Arial";
+      lienzo.fillText(procesos[i],13,i*(tamaño+intervalo)+17);
     }
-    function pintar_procesos(){
-      var elemento = document.getElementById("lienzo");
-      var lienzo = elemento.getContext('2d');      
-      for(var i=1; i<procesos.length; i++){ 
-        if(contador-1 >= tiempoComienzo[i] && contador-1<tiempoFinalizacion[i]){
-          lienzo.fillStyle = colores[i];      
+    //DIBUJAR NUMEROS
+    for(var i=0; i<=tiempoFinalizacion[tiempoFinalizacion.length-1]; i++){
+      lienzo.fillStyle = "black";
+      lienzo.font = "20px Arial";
+      lienzo.fillText(i, (i+1)*(tamaño+intervalo)+10, 290);
+    }
+  }
+  function pintar_procesos(){
+    var elemento = document.getElementById("lienzo");
+    var lienzo = elemento.getContext('2d');      
+    for(var i=1; i<procesos.length; i++){ 
+      if(contador-1 >= tiempoComienzo[i] && contador-1<tiempoFinalizacion[i]){
+        lienzo.fillStyle = colores[i];      
+      }
+      else{
+        if(llegada[i]>contador-1 || contador-1>=tiempoFinalizacion[i]){
+          lienzo.fillStyle = colores[colores.length-1];
         }
         else{
-          if(llegada[i]>contador-1 || contador-1>=tiempoFinalizacion[i]){
-            lienzo.fillStyle = colores[colores.length-1];
-          }
-          else{
-            lienzo.fillStyle = colores[0];
-          }
+          lienzo.fillStyle = colores[0];
         }
-        lienzo.fillRect(contador*(tamaño+intervalo)+10, i*(tamaño+intervalo),tamaño,tamaño);       
       }
-      contador++;
-      /*if(contador>tiempoFinalizacion[tiempoFinalizacion.length-1]){
-        clearInterval(intervalo);
-      }*/
+      lienzo.fillRect(contador*(tamaño+intervalo)+10, i*(tamaño+intervalo),tamaño,tamaño);       
     }
-    $("#inicio").hide();
-    pintar();
-    setInterval(pintar_procesos,1000);            
-    //var intervalo = setInterval(pintar_procesos,1000);            
-  });  
-  //$("#lienzo").css({"background-color":"black"});
+    contador++;
+  }
 });
