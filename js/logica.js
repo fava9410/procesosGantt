@@ -7,9 +7,10 @@ $(document).ready(function(){
   var tiempoEspera = ["Tiempo de Espera"];
   var tiempoComienzo = ["Tiempo de Comienzo"];
   var colores = ["red","blue","green","brown","yellow","purple","magenta","gray","white"]
-  var alea = 0;
+  var alea = 0, intervalo = 10, tamaño = 20, contador = 1;;
   var matriz = [procesos,llegada,tiemposRafaga,tiempoComienzo,tiempoFinalizacion,tiempoRetorno,tiempoEspera];
-  var intervalo = 10, tamaño = 20, contador = 1;
+  
+  var bloqueados = [];
   $("#inicio").click(function(){
 
     
@@ -27,6 +28,28 @@ $(document).ready(function(){
   });  
   //$("#lienzo").css({"background-color":"black"});
 
+  $("#parar").click(function(){
+    var queda = 0;
+    for(var i=1; i<procesos.length; i++){
+      if(contador>=tiempoComienzo[i] && contador<tiempoFinalizacion[i]){
+        bloqueados.push(procesos[i]);
+        queda = tiempoFinalizacion[i]-contador+1;
+        console.log("queda "+queda+" contador "+contador);
+
+        for(var j=1; j<procesos.length; j++){
+          console.log("llegada antes "+llegada[j]);
+          llegada[j] = llegada[j]-queda;
+          console.log("llegada despues "+llegada[j]);
+        }
+      }
+    }  
+      //borrarTabla();
+      rellenarTabla();      
+      dibujarTabla();
+    
+    console.log(bloqueados);
+  });
+
   function rellenarTabla(){
     //RAFAGA
     for(var i=0; i<procesos.length-1; i++){
@@ -35,28 +58,30 @@ $(document).ready(function(){
     }
     //LLEGADA
     for(var i=0; i< (procesos.length-1)*4; i+=4){
-      alea = i+Math.round(Math.random()*3);
-      llegada.push(alea);
+      if(contador == 1){
+        alea = i+Math.round(Math.random()*3);
+        llegada.push(alea);  
+      }      
     }
     //FINALIZACION
     for(var i=1; i<procesos.length; i++){
       if(llegada[i]>=tiempoFinalizacion[i-1] || i==1){
-        tiempoFinalizacion.push(llegada[i]+tiemposRafaga[i]);
+        tiempoFinalizacion[i] = llegada[i]+tiemposRafaga[i];
       } else{
-        tiempoFinalizacion.push(tiempoFinalizacion[i-1]+tiemposRafaga[i]);  
+        tiempoFinalizacion[i] = tiempoFinalizacion[i-1]+tiemposRafaga[i];  
       }
     }    
     //RETORNO
     for(var i=1; i<procesos.length; i++){
-      tiempoRetorno.push(tiempoFinalizacion[i]-llegada[i]);
+      tiempoRetorno[i] = tiempoFinalizacion[i]-llegada[i];
     }
     //ESPERA
     for(var i=1; i<procesos.length; i++){
-      tiempoEspera.push(tiempoRetorno[i]-tiemposRafaga[i]);
+      tiempoEspera[i] = tiempoRetorno[i]-tiemposRafaga[i];
     }
     //COMIENZO
     for(var i=1; i<procesos.length; i++){
-      tiempoComienzo.push(llegada[i]+tiempoEspera[i]);
+      tiempoComienzo[i] = llegada[i]+tiempoEspera[i];
     }
   }
 
@@ -95,6 +120,10 @@ $(document).ready(function(){
     tabla.setAttribute("border", "2");
   }
 
+  function borrarTabla(){
+    var tabla = $("#tabla").empty();
+  }
+
   function pintar(){
     var elemento = document.getElementById("lienzo");
     var lienzo = elemento.getContext('2d');          
@@ -110,7 +139,7 @@ $(document).ready(function(){
     for(var i=0; i<=tiempoFinalizacion[tiempoFinalizacion.length-1]; i++){
       lienzo.fillStyle = "black";
       lienzo.font = "20px Arial";
-      lienzo.fillText(i, (i+1)*(tamaño+intervalo)+10, 290);
+      lienzo.fillText(i, (i+1)*(tamaño+intervalo)+10, procesos.length*(tamaño+intervalo)+40);//290);
     }
   }
   function pintar_procesos(){
