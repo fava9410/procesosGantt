@@ -10,8 +10,8 @@ $(document).ready(function(){
   var alea = 0, intervalo = 10, tamaño = 20, contador = 1;
   var matriz = [procesos,llegada,tiemposRafaga,tiempoComienzo,tiempoFinalizacion,tiempoRetorno,tiempoEspera];
   
-  var bloqueados = [];
-  
+  var bloqueados = ["Tiempo bloqueados"];
+
   $("#inicio").click(function(){
 
     
@@ -35,12 +35,9 @@ $(document).ready(function(){
       if(contador>=tiempoComienzo[i] && contador<tiempoFinalizacion[i]){
         bloqueados.push(procesos[i]);
         queda = tiempoFinalizacion[i]-contador+1;
-        console.log("queda "+queda+" contador "+contador);
 
         for(var j=1; j<procesos.length; j++){
-          console.log("llegada antes "+llegada[j]);
           llegada[j] = llegada[j]-queda;
-          console.log("llegada despues "+llegada[j]);
         }
       }
     }  
