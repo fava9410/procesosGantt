@@ -9,20 +9,11 @@ $(document).ready(function(){
   var colores = ["red","blue","green","brown","yellow","purple","magenta","gray","white"]
   var alea = 0, intervalo = 10, tamaño = 20, contador = 1;
   var matriz = [procesos,llegada,tiemposRafaga,tiempoComienzo,tiempoFinalizacion,tiempoRetorno,tiempoEspera];
-  
-  var bloqueados = ["Tiempo bloqueados"];
 
-  $("#inicio").click(function(){
-
-    
+  $("#inicio").click(function(){   
 
     rellenarTabla();
     dibujarTabla();
-    //contador++;
-      /*if(contador>tiempoFinalizacion[tiempoFinalizacion.length-1]){
-        clearInterval(intervalo);
-      }*/
-    
     $("#inicio").hide();
     pintar();
     setInterval(pintar_procesos,1000);                
@@ -33,7 +24,6 @@ $(document).ready(function(){
     var queda = 0;
     for(var i=1; i<procesos.length; i++){
       if(contador>=tiempoComienzo[i] && contador<tiempoFinalizacion[i]){
-        bloqueados.push(procesos[i]);
         queda = tiempoFinalizacion[i]-contador+1;
 
         for(var j=1; j<procesos.length; j++){
@@ -44,8 +34,6 @@ $(document).ready(function(){
       //borrarTabla();
       rellenarTabla();      
       dibujarTabla();
-    
-    console.log(bloqueados);
   });
 
   function rellenarTabla(){
@@ -84,37 +72,22 @@ $(document).ready(function(){
   }
 
   function dibujarTabla(){
-    // Obtener la referencia del elemento body
     var body = document.getElementById("tabla");
-
-    // Crea un elemento <table> y un elemento <tbody>
     var tabla   = document.createElement("table");
     var tblBody = document.createElement("tbody");
    
-    // Crea las celdas
     for (var j = 0; j < procesos.length; j++) {
-      // Crea las hileras de la tabla
-      var hilera = document.createElement("tr");
-   
+      var hilera = document.createElement("tr");   
       for (var i = 0; i < matriz.length; i++){
-        // Crea un elemento <td> y un nodo de texto, haz que el nodo de
-        // texto sea el contenido de <td>, ubica el elemento <td> al final
-        // de la hilera de la tabla
         var celda = document.createElement("td");
         var textoCelda = document.createTextNode(matriz[i][j]);
         celda.appendChild(textoCelda);
         hilera.appendChild(celda);
-      }
-   
-      // agrega la hilera al final de la tabla (al final del elemento tblbody)
+      }   
       tblBody.appendChild(hilera);
-    }
-   
-    // posiciona el <tbody> debajo del elemento <table>
+    }   
     tabla.appendChild(tblBody);
-    // appends <table> into <body>
     body.appendChild(tabla);
-    // modifica el atributo "border" de la tabla y lo fija a "2";
     tabla.setAttribute("border", "2");
   }
 
@@ -137,7 +110,7 @@ $(document).ready(function(){
     for(var i=0; i<=tiempoFinalizacion[tiempoFinalizacion.length-1]; i++){
       lienzo.fillStyle = "black";
       lienzo.font = "20px Arial";
-      lienzo.fillText(i, (i+1)*(tamaño+intervalo)+10, procesos.length*(tamaño+intervalo)+40);//290);
+      lienzo.fillText(i, (i+1)*(tamaño+intervalo)+10, procesos.length*(tamaño+intervalo)+40);
     }
   }
   function pintar_procesos(){
