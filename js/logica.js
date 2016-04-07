@@ -7,10 +7,11 @@ $(document).ready(function(){
   var tiempoEspera = ["Tiempo de Espera"];
   var tiempoComienzo = ["Tiempo de Comienzo"];
   var colores = ["red","blue","green","brown","yellow","purple","magenta","gray","white"]
-  var alea = 0, intervalo = 10, tamaño = 20, contador = 1;;
+  var alea = 0, intervalo = 10, tamaño = 20, contador = 1;
   var matriz = [procesos,llegada,tiemposRafaga,tiempoComienzo,tiempoFinalizacion,tiempoRetorno,tiempoEspera];
   
   var bloqueados = [];
+  
   $("#inicio").click(function(){
 
     
